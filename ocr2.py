@@ -1,7 +1,9 @@
+import os, sys
 import scraperwiki, urllib2
 from bs4 import BeautifulSoup
 import requests
 import csv
+
 
 def send_Request(url):
 #Get content, regardless of whether an HTML, XML or PDF file
@@ -26,7 +28,7 @@ base_soup = BeautifulSoup(response.content)
 
 all_districts = base_soup.find('select', {'id': 'district'})
 all_district_node = all_districts.findAll('option')
-for district_node in all_district_node:
+for district_node in all_district_node[2:]:
     if district_node['value'] != '0':
         district_name = district_node.text
         district_value = district_node['value']
@@ -112,6 +114,7 @@ for district_node in all_district_node:
                             data_dict[district_name][cons_name][station_modified_name] = temp_data_dict
 
                         print temp_data_dict
+                        os.system('rm /tmp/*.png')
                 print data_dict
                 for district_key, district_data in data_dict.iteritems():
                     for cons_key, cons_data in district_data.iteritems():
