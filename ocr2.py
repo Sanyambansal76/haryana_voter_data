@@ -28,7 +28,7 @@ base_soup = BeautifulSoup(response.content)
 
 all_districts = base_soup.find('select', {'id': 'district'})
 all_district_node = all_districts.findAll('option')
-for district_node in all_district_node[:5:-1]:
+for district_node in all_district_node[-3:5:-1]:
     if district_node['value'] != '0':
         district_name = district_node.text
         district_value = district_node['value']
