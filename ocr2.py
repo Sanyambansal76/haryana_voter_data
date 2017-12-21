@@ -28,7 +28,8 @@ base_soup = BeautifulSoup(response.content)
 
 all_districts = base_soup.find('select', {'id': 'district'})
 all_district_node = all_districts.findAll('option')
-for district_node in all_district_node[-3:5:-1]:
+for district_node in all_district_node[-4:5:-1]:
+    print district_node
     if district_node['value'] != '0':
         district_name = district_node.text
         district_value = district_node['value']
@@ -58,7 +59,15 @@ for district_node in all_district_node[-3:5:-1]:
                         station_name = station.text
                         station_value = station['value']
                         pdf_link = "http://ceoharyana.nic.in/directs/check_draft.php?Type=pdf&ID={}".format(station_value)
-                        pdf_link_response = requests.get(pdf_link)
+
+                        for i in range(7):
+                            try:
+                                pdf_link_response = requests.get(pdf_link)
+                                break
+                            except:
+                                import time
+                                time.sleep(10)
+
                         pdf_link_soup = BeautifulSoup(pdf_link_response.content)
                         final_link = pdf_link_soup.find('a')['href']
                         pdf = process_PDF(final_link)
